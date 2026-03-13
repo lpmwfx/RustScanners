@@ -131,14 +131,14 @@ pub fn scan_file(path: &Path, cfg: &Config) -> Vec<Issue> {
     if cfg.check_hardcoded_durations {
         checks::hardcoded_durations::check(&ctx, &lines, &mut issues);
     }
-    if cfg.check_hardcoded_urls {
-        checks::hardcoded_urls::check(&ctx, &lines, &mut issues);
-    }
-    if cfg.check_hardcoded_paths {
-        checks::hardcoded_paths::check(&ctx, &lines, &mut issues);
-    }
     if cfg.check_string_states {
         checks::string_states::check(&ctx, &lines, &mut issues);
+    }
+    if cfg.check_unwrap_panic {
+        checks::unwrap_panic::check(&ctx, &lines, &mut issues);
+    }
+    if cfg.check_unsafe_no_comment {
+        checks::unsafe_no_comment::check(&ctx, &lines, &mut issues);
     }
 
     issues

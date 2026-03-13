@@ -9,6 +9,18 @@ readme = "README.md"
 keywords = ["lint", "static-analysis", "build-script", "zero-literal"]
 categories = ["development-tools", "development-tools::build-utils"]
 
+[[bin]]
+name = "file_size"
+path = "src/bin/file_size.rs"
+
+[[bin]]
+name = "secrets"
+path = "src/bin/secrets.rs"
+
+[[bin]]
+name = "nesting"
+path = "src/bin/nesting.rs"
+
 [dependencies]
 regex = "1"
 toml = "0.8"
