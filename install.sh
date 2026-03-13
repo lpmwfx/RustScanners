@@ -64,9 +64,9 @@ deny = false                  # true = cargo build fails on violations
 # Toggle individual scanners
 magic_numbers = true          # integers >= 2, floats except 0.0/1.0
 hardcoded_durations = true    # Duration::from_secs(30) etc.
-hardcoded_urls = true         # "http://..." / "https://..."
-hardcoded_paths = true        # "config.toml", "data.json" etc.
 string_states = true          # match "foo" =>, == "kind"
+unwrap_panic = true           # .unwrap()/.expect()/panic!()/todo!() outside tests
+unsafe_no_comment = true      # unsafe block/fn without // SAFETY: comment
 EOF
     echo "[+] Created proj/rulestools.toml"
 else
