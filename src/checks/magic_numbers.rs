@@ -19,7 +19,7 @@ static FLOAT_LIT: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"\b(\d+\.\d+)\b").unwrap());
 
 static INT_LIT: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"(?<![#\w.\-])\b(\d+)\b(?![.\w])").unwrap());
+    LazyLock::new(|| Regex::new(r"\b(\d+)\b").unwrap());
 
 static STRING_LIT: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r#""[^"]*""#).unwrap());
@@ -91,13 +91,33 @@ pub fn check(ctx: &FileContext, lines: &[&str], issues: &mut Vec<Issue>) {
         for cap in INT_LIT.captures_iter(&clean) {
             let m = cap.get(1).unwrap();
             let val = m.as_str();
+            let start = m.start();
 
             // Skip if part of a float
             if float_positions
                 .iter()
-                .any(|&fp| m.start().abs_diff(fp) <= val.len() + 1)
+                .any(|&fp| start.abs_diff(fp) <= val.len() + 1)
             {
                 continue;
+            }
+
+            // Skip if preceded by: # (attribute), . (field), _ or letter (identifier)
+            if start > 0 {
+                let prev = clean.as_bytes()[start - 1];
+                if prev == b'#' || prev == b'.' || prev == b'_'
+                    || prev.is_ascii_alphanumeric()
+                {
+                    continue;
+                }
+            }
+
+            // Skip if followed by: . (field/method), _ or letter (identifier suffix)
+            let end = m.end();
+            if end < clean.len() {
+                let next = clean.as_bytes()[end];
+                if next == b'.' || next == b'_' || next.is_ascii_alphanumeric() {
+                    continue;
+                }
             }
 
             let n: u64 = match val.parse() {
