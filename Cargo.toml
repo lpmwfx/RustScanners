@@ -1,0 +1,16 @@
+[package]
+name = "rustscanners"
+version = "0.1.0"
+edition = "2021"
+description = "Zero-literal Rust scanners for cargo build — enforces rules from lpmwfx/Rules"
+license = "MIT"
+repository = "https://github.com/lpmwfx/RustScanners"
+readme = "README.md"
+keywords = ["lint", "static-analysis", "build-script", "zero-literal"]
+categories = ["development-tools", "development-tools::build-utils"]
+
+[dependencies]
+regex = "1"
+toml = "0.8"
+serde = { version = "1", features = ["derive"] }
+walkdir = "2"
