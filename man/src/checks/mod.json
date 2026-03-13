@@ -1,0 +1,47 @@
+{
+  "source": "src/checks/mod.rs",
+  "items": [
+    {
+      "name": "magic_numbers",
+      "kind": "mod",
+      "signature": "pub mod magic_numbers;",
+      "line": 2,
+      "doc": "Zero-literal enforcement for magic numbers — rust/constants.md"
+    },
+    {
+      "name": "hardcoded_durations",
+      "kind": "mod",
+      "signature": "pub mod hardcoded_durations;",
+      "line": 4,
+      "doc": "Detect hardcoded Duration literals — rust/constants.md"
+    },
+    {
+      "name": "string_states",
+      "kind": "mod",
+      "signature": "pub mod string_states;",
+      "line": 6,
+      "doc": "Detect string literal state matching — rust/types.md"
+    },
+    {
+      "name": "unwrap_panic",
+      "kind": "mod",
+      "signature": "pub mod unwrap_panic;",
+      "line": 8,
+      "doc": "Detect unwrap() and panic!() in non-test code — rust/errors.md"
+    },
+    {
+      "name": "unsafe_no_comment",
+      "kind": "mod",
+      "signature": "pub mod unsafe_no_comment;",
+      "line": 10,
+      "doc": "Require // SAFETY: comments on unsafe blocks — rust/safety.md"
+    },
+    {
+      "name": "doc_comments",
+      "kind": "mod",
+      "signature": "pub mod doc_comments;",
+      "line": 12,
+      "doc": "Enforce /// doc comments on all pub items — rust/docs.md"
+    }
+  ]
+}

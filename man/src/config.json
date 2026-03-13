@@ -1,0 +1,19 @@
+{
+  "source": "src/config.rs",
+  "items": [
+    {
+      "name": "Config",
+      "kind": "struct",
+      "signature": "pub struct Config",
+      "line": 6,
+      "doc": "Scanner configuration — loaded from `proj/rulestools.toml`."
+    },
+    {
+      "name": "load",
+      "kind": "fn",
+      "signature": "pub fn load(project_root: &Path) -> Self",
+      "line": 53,
+      "doc": "Load configuration from `proj/rulestools.toml` in the project root.\nFalls back to defaults if the file doesn't exist."
+    }
+  ]
+}

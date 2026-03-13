@@ -27,6 +27,7 @@ static PUB_ITEM: LazyLock<Regex> = LazyLock::new(|| {
 static ATTRIBUTE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"^\s*#\[").unwrap());
 
+/// Scan for all pub items without /// doc comments — emit issues for any undocumented public function, struct, enum, trait, type, mod, const, or static.
 pub fn check(ctx: &FileContext, lines: &[&str], issues: &mut Vec<Issue>) {
     if ctx.is_test_file {
         return;

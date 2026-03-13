@@ -1,0 +1,12 @@
+{
+  "source": "src/checks/unsafe_no_comment.rs",
+  "items": [
+    {
+      "name": "check",
+      "kind": "fn",
+      "signature": "pub fn check(ctx: &FileContext, lines: &[&str], issues: &mut Vec<Issue>)",
+      "line": 43,
+      "doc": "Scan for unsafe blocks and functions — require a // SAFETY: comment on an adjacent line explaining the invariant."
+    }
+  ]
+}

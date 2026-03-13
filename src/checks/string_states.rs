@@ -27,6 +27,7 @@ static EQ_STR: LazyLock<Regex> =
 static SKIP_VALUES: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"(?:\s|[/\\.]|[A-Z]{2}|[?!,])").unwrap());
 
+/// Scan for string literal state comparisons — detect match arms and == operators on strings that look like identifiers.
 pub fn check(ctx: &FileContext, lines: &[&str], issues: &mut Vec<Issue>) {
     if ctx.is_test_file {
         return;

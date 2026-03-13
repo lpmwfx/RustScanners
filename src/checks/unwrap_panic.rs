@@ -28,6 +28,7 @@ static PANIC: LazyLock<Regex> =
 static TODO_UNIMPL: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"\b(?:todo|unimplemented)!\s*[(\[]").unwrap());
 
+/// Scan for unwrap(), expect(), panic!(), todo!(), and unimplemented!() calls outside test code.
 pub fn check(ctx: &FileContext, lines: &[&str], issues: &mut Vec<Issue>) {
     if ctx.is_test_file {
         return;

@@ -1,0 +1,26 @@
+{
+  "source": "src/lib.rs",
+  "items": [
+    {
+      "name": "checks",
+      "kind": "mod",
+      "signature": "pub mod checks;",
+      "line": 8,
+      "doc": "Collection of RulesTools static analysis checks — zero-literals, unwrap, doc comments, and more."
+    },
+    {
+      "name": "scan_project",
+      "kind": "fn",
+      "signature": "pub fn scan_project() -> usize",
+      "line": 43,
+      "doc": "Scan the project and emit `cargo:warning` for each violation.\nCall this from `build.rs`.\n\nReturns the total number of errors found."
+    },
+    {
+      "name": "scan_file",
+      "kind": "fn",
+      "signature": "pub fn scan_file(path: &Path, cfg: &Config) -> Vec<Issue>",
+      "line": 118,
+      "doc": "Scan a single `.rs` file and return all issues."
+    }
+  ]
+}

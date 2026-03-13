@@ -16,6 +16,7 @@ static DURATION_LITERAL: LazyLock<Regex> = LazyLock::new(|| {
         .unwrap()
 });
 
+/// Scan for hardcoded Duration literals — emit issues for Duration::from_secs/millis/nanos/etc with non-zero arguments.
 pub fn check(ctx: &FileContext, lines: &[&str], issues: &mut Vec<Issue>) {
     if ctx.is_test_file {
         return;

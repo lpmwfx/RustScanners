@@ -7,6 +7,7 @@ pub struct FileContext<'a> {
 }
 
 impl<'a> FileContext<'a> {
+    /// Create a new FileContext for a file being scanned, detecting if it's a test file.
     pub fn new(path: &'a Path, _lines: &[&str]) -> Self {
         Self {
             path,

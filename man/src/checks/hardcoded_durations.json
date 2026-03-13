@@ -1,0 +1,12 @@
+{
+  "source": "src/checks/hardcoded_durations.rs",
+  "items": [
+    {
+      "name": "check",
+      "kind": "fn",
+      "signature": "pub fn check(ctx: &FileContext, lines: &[&str], issues: &mut Vec<Issue>)",
+      "line": 20,
+      "doc": "Scan for hardcoded Duration literals — emit issues for Duration::from_secs/millis/nanos/etc with non-zero arguments."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "source": "src/context.rs",
+  "items": [
+    {
+      "name": "FileContext",
+      "kind": "struct",
+      "signature": "pub struct FileContext<'a>",
+      "line": 4,
+      "doc": "Shared context for a file being scanned."
+    },
+    {
+      "name": "new",
+      "kind": "fn",
+      "signature": "pub fn new(path: &'a Path, _lines: &[&str]) -> Self",
+      "line": 11,
+      "doc": "Create a new FileContext for a file being scanned, detecting if it's a test file."
+    },
+    {
+      "name": "is_test_context",
+      "kind": "fn",
+      "signature": "pub fn is_test_context(lines: &[&str], lineno: usize) -> bool",
+      "line": 36,
+      "doc": "Check if a line number is inside a `#[test]` or `#[cfg(test)]` block.\nScans backwards up to 60 lines looking for test markers."
+    },
+    {
+      "name": "is_const_def",
+      "kind": "fn",
+      "signature": "pub fn is_const_def(line: &str) -> bool",
+      "line": 51,
+      "doc": "Check if line is a `const` or `static` definition."
+    },
+    {
+      "name": "is_comment",
+      "kind": "fn",
+      "signature": "pub fn is_comment(line: &str) -> bool",
+      "line": 67,
+      "doc": "Check if line is a comment."
+    }
+  ]
+}

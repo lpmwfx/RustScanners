@@ -1,0 +1,12 @@
+{
+  "source": "src/checks/string_states.rs",
+  "items": [
+    {
+      "name": "check",
+      "kind": "fn",
+      "signature": "pub fn check(ctx: &FileContext, lines: &[&str], issues: &mut Vec<Issue>)",
+      "line": 31,
+      "doc": "Scan for string literal state comparisons — detect match arms and == operators on strings that look like identifiers."
+    }
+  ]
+}

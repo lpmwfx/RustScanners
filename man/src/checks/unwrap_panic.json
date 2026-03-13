@@ -1,0 +1,12 @@
+{
+  "source": "src/checks/unwrap_panic.rs",
+  "items": [
+    {
+      "name": "check",
+      "kind": "fn",
+      "signature": "pub fn check(ctx: &FileContext, lines: &[&str], issues: &mut Vec<Issue>)",
+      "line": 32,
+      "doc": "Scan for unwrap(), expect(), panic!(), todo!(), and unimplemented!() calls outside test code."
+    }
+  ]
+}

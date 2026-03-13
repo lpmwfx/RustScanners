@@ -1,0 +1,41 @@
+# Documentation Issues — RustScanners
+
+17 items need /// doc comments
+
+## src/checks/doc_comments.rs
+- line 30: `check` (fn)
+
+## src/checks/hardcoded_durations.rs
+- line 19: `check` (fn)
+
+## src/checks/magic_numbers.rs
+- line 41: `check` (fn)
+
+## src/checks/mod.rs
+- line 1: `magic_numbers` (mod)
+- line 2: `hardcoded_durations` (mod)
+- line 3: `string_states` (mod)
+- line 4: `unwrap_panic` (mod)
+- line 5: `unsafe_no_comment` (mod)
+- line 6: `doc_comments` (mod)
+
+## src/checks/string_states.rs
+- line 30: `check` (fn)
+
+## src/checks/unsafe_no_comment.rs
+- line 42: `check` (fn)
+
+## src/checks/unwrap_panic.rs
+- line 31: `check` (fn)
+
+## src/context.rs
+- line 10: `new` (fn)
+
+## src/issue.rs
+- line 5: `Severity` (enum)
+- line 10: `Issue` (struct)
+- line 20: `error` (fn)
+
+## src/lib.rs
+- line 7: `checks` (mod)
+

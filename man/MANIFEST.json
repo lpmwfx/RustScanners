@@ -1,0 +1,267 @@
+{
+  "generated": "2026-03-13T22:00:49.536118500+01:00",
+  "project": "project",
+  "files": [
+    {
+      "source": "src/bin/file_size.rs",
+      "man_path": "man/src/bin/file_size.json",
+      "item_count": 0,
+      "undoc_count": 0
+    },
+    {
+      "source": "src/bin/nesting.rs",
+      "man_path": "man/src/bin/nesting.json",
+      "item_count": 0,
+      "undoc_count": 0
+    },
+    {
+      "source": "src/bin/secrets.rs",
+      "man_path": "man/src/bin/secrets.json",
+      "item_count": 0,
+      "undoc_count": 0
+    },
+    {
+      "source": "src/checks/doc_comments.rs",
+      "man_path": "man/src/checks/doc_comments.json",
+      "item_count": 1,
+      "undoc_count": 0
+    },
+    {
+      "source": "src/checks/hardcoded_durations.rs",
+      "man_path": "man/src/checks/hardcoded_durations.json",
+      "item_count": 1,
+      "undoc_count": 0
+    },
+    {
+      "source": "src/checks/magic_numbers.rs",
+      "man_path": "man/src/checks/magic_numbers.json",
+      "item_count": 1,
+      "undoc_count": 0
+    },
+    {
+      "source": "src/checks/mod.rs",
+      "man_path": "man/src/checks/mod.json",
+      "item_count": 6,
+      "undoc_count": 0
+    },
+    {
+      "source": "src/checks/string_states.rs",
+      "man_path": "man/src/checks/string_states.json",
+      "item_count": 1,
+      "undoc_count": 0
+    },
+    {
+      "source": "src/checks/unsafe_no_comment.rs",
+      "man_path": "man/src/checks/unsafe_no_comment.json",
+      "item_count": 1,
+      "undoc_count": 0
+    },
+    {
+      "source": "src/checks/unwrap_panic.rs",
+      "man_path": "man/src/checks/unwrap_panic.json",
+      "item_count": 1,
+      "undoc_count": 0
+    },
+    {
+      "source": "src/config.rs",
+      "man_path": "man/src/config.json",
+      "item_count": 2,
+      "undoc_count": 0
+    },
+    {
+      "source": "src/context.rs",
+      "man_path": "man/src/context.json",
+      "item_count": 5,
+      "undoc_count": 0
+    },
+    {
+      "source": "src/issue.rs",
+      "man_path": "man/src/issue.json",
+      "item_count": 3,
+      "undoc_count": 0
+    },
+    {
+      "source": "src/lib.rs",
+      "man_path": "man/src/lib.json",
+      "item_count": 3,
+      "undoc_count": 0
+    }
+  ],
+  "all_items": [
+    {
+      "name": "check",
+      "kind": "fn",
+      "source": "src/checks/doc_comments.rs",
+      "line": 31,
+      "documented": true
+    },
+    {
+      "name": "check",
+      "kind": "fn",
+      "source": "src/checks/hardcoded_durations.rs",
+      "line": 20,
+      "documented": true
+    },
+    {
+      "name": "check",
+      "kind": "fn",
+      "source": "src/checks/magic_numbers.rs",
+      "line": 42,
+      "documented": true
+    },
+    {
+      "name": "magic_numbers",
+      "kind": "mod",
+      "source": "src/checks/mod.rs",
+      "line": 2,
+      "documented": true
+    },
+    {
+      "name": "hardcoded_durations",
+      "kind": "mod",
+      "source": "src/checks/mod.rs",
+      "line": 4,
+      "documented": true
+    },
+    {
+      "name": "string_states",
+      "kind": "mod",
+      "source": "src/checks/mod.rs",
+      "line": 6,
+      "documented": true
+    },
+    {
+      "name": "unwrap_panic",
+      "kind": "mod",
+      "source": "src/checks/mod.rs",
+      "line": 8,
+      "documented": true
+    },
+    {
+      "name": "unsafe_no_comment",
+      "kind": "mod",
+      "source": "src/checks/mod.rs",
+      "line": 10,
+      "documented": true
+    },
+    {
+      "name": "doc_comments",
+      "kind": "mod",
+      "source": "src/checks/mod.rs",
+      "line": 12,
+      "documented": true
+    },
+    {
+      "name": "check",
+      "kind": "fn",
+      "source": "src/checks/string_states.rs",
+      "line": 31,
+      "documented": true
+    },
+    {
+      "name": "check",
+      "kind": "fn",
+      "source": "src/checks/unsafe_no_comment.rs",
+      "line": 43,
+      "documented": true
+    },
+    {
+      "name": "check",
+      "kind": "fn",
+      "source": "src/checks/unwrap_panic.rs",
+      "line": 32,
+      "documented": true
+    },
+    {
+      "name": "Config",
+      "kind": "struct",
+      "source": "src/config.rs",
+      "line": 6,
+      "documented": true
+    },
+    {
+      "name": "load",
+      "kind": "fn",
+      "source": "src/config.rs",
+      "line": 53,
+      "documented": true
+    },
+    {
+      "name": "FileContext",
+      "kind": "struct",
+      "source": "src/context.rs",
+      "line": 4,
+      "documented": true
+    },
+    {
+      "name": "new",
+      "kind": "fn",
+      "source": "src/context.rs",
+      "line": 11,
+      "documented": true
+    },
+    {
+      "name": "is_test_context",
+      "kind": "fn",
+      "source": "src/context.rs",
+      "line": 36,
+      "documented": true
+    },
+    {
+      "name": "is_const_def",
+      "kind": "fn",
+      "source": "src/context.rs",
+      "line": 51,
+      "documented": true
+    },
+    {
+      "name": "is_comment",
+      "kind": "fn",
+      "source": "src/context.rs",
+      "line": 67,
+      "documented": true
+    },
+    {
+      "name": "Severity",
+      "kind": "enum",
+      "source": "src/issue.rs",
+      "line": 6,
+      "documented": true
+    },
+    {
+      "name": "Issue",
+      "kind": "struct",
+      "source": "src/issue.rs",
+      "line": 12,
+      "documented": true
+    },
+    {
+      "name": "error",
+      "kind": "fn",
+      "source": "src/issue.rs",
+      "line": 23,
+      "documented": true
+    },
+    {
+      "name": "checks",
+      "kind": "mod",
+      "source": "src/lib.rs",
+      "line": 8,
+      "documented": true
+    },
+    {
+      "name": "scan_project",
+      "kind": "fn",
+      "source": "src/lib.rs",
+      "line": 43,
+      "documented": true
+    },
+    {
+      "name": "scan_file",
+      "kind": "fn",
+      "source": "src/lib.rs",
+      "line": 118,
+      "documented": true
+    }
+  ]
+}

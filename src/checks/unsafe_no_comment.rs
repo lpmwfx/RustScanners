@@ -39,6 +39,7 @@ fn has_safety_comment(lines: &[&str], idx: usize) -> bool {
     false
 }
 
+/// Scan for unsafe blocks and functions — require a // SAFETY: comment on an adjacent line explaining the invariant.
 pub fn check(ctx: &FileContext, lines: &[&str], issues: &mut Vec<Issue>) {
     if ctx.is_test_file {
         return;

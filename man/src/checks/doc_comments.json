@@ -1,0 +1,12 @@
+{
+  "source": "src/checks/doc_comments.rs",
+  "items": [
+    {
+      "name": "check",
+      "kind": "fn",
+      "signature": "pub fn check(ctx: &FileContext, lines: &[&str], issues: &mut Vec<Issue>)",
+      "line": 31,
+      "doc": "Scan for all pub items without /// doc comments — emit issues for any undocumented public function, struct, enum, trait, type, mod, const, or static."
+    }
+  ]
+}

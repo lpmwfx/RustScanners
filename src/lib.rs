@@ -4,6 +4,7 @@
 //! Add as a `[build-dependencies]` and call `rustscanners::scan_project()`
 //! from `build.rs` to enforce rules during `cargo build`.
 
+/// Collection of RulesTools static analysis checks — zero-literals, unwrap, doc comments, and more.
 pub mod checks;
 mod config;
 mod issue;
