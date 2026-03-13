@@ -11,6 +11,7 @@ pub struct Config {
     pub check_string_states: bool,
     pub check_unwrap_panic: bool,
     pub check_unsafe_no_comment: bool,
+    pub check_doc_comments: bool,
 }
 
 impl Default for Config {
@@ -23,6 +24,7 @@ impl Default for Config {
             check_string_states: true,
             check_unwrap_panic: true,
             check_unsafe_no_comment: true,
+            check_doc_comments: true,
         }
     }
 }
@@ -42,6 +44,7 @@ struct TomlScanners {
     string_states: Option<bool>,
     unwrap_panic: Option<bool>,
     unsafe_no_comment: Option<bool>,
+    doc_comments: Option<bool>,
 }
 
 impl Config {
@@ -61,6 +64,7 @@ impl Config {
                     if let Some(v) = s.string_states       { cfg.check_string_states = v; }
                     if let Some(v) = s.unwrap_panic        { cfg.check_unwrap_panic = v; }
                     if let Some(v) = s.unsafe_no_comment   { cfg.check_unsafe_no_comment = v; }
+                    if let Some(v) = s.doc_comments        { cfg.check_doc_comments = v; }
                 }
             }
         }

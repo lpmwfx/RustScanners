@@ -140,6 +140,9 @@ pub fn scan_file(path: &Path, cfg: &Config) -> Vec<Issue> {
     if cfg.check_unsafe_no_comment {
         checks::unsafe_no_comment::check(&ctx, &lines, &mut issues);
     }
+    if cfg.check_doc_comments {
+        checks::doc_comments::check(&ctx, &lines, &mut issues);
+    }
 
     issues
 }

@@ -67,6 +67,7 @@ hardcoded_durations = true    # Duration::from_secs(30) etc.
 string_states = true          # match "foo" =>, == "kind"
 unwrap_panic = true           # .unwrap()/.expect()/panic!()/todo!() outside tests
 unsafe_no_comment = true      # unsafe block/fn without // SAFETY: comment
+doc_comments = true           # pub items must have /// doc comment
 EOF
     echo "[+] Created proj/rulestools.toml"
 else
