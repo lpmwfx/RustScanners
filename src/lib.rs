@@ -10,7 +10,7 @@ mod issue;
 mod context;
 
 pub use config::Config;
-pub use issue::{Issue, Severity};
+pub use issue::Issue;
 
 use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
@@ -88,11 +88,8 @@ pub fn scan_project() -> usize {
     for path in &rs_files {
         let issues = scan_file(path, &cfg);
         for issue in &issues {
-            // cargo:warning is the only way build scripts communicate diagnostics
             println!("cargo:warning={}", issue);
-            if issue.severity == Severity::Error {
-                total_errors += 1;
-            }
+            total_errors += 1;
         }
     }
 
