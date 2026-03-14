@@ -13,6 +13,7 @@ Runs automatically during `cargo build` via `build.rs`.
 | **hardcoded_urls** | URL string literals | `"https://api.example.com"` |
 | **hardcoded_paths** | File path string literals | `"config.toml"` |
 | **string_states** | String literals as discriminators | `match x { "active" => ... }` |
+| **child_module_size** | Inline modules > 100 lines (advisory) | `mod parser { ... }` (150+ lines) |
 
 ## 6 exemptions
 
@@ -57,6 +58,11 @@ hardcoded_durations = true
 hardcoded_urls = true
 hardcoded_paths = true
 string_states = true
+child_module_size = true
+
+# Child module extraction thresholds (lines)
+child_module_warn_at = 100      # "Plan extraction now" (warning)
+child_module_error_at = 150     # "Extract immediately" (error)
 
 # Optional: exclude paths from scanning (glob patterns)
 exclude = ["target/*", "**/vendor/*"]
@@ -93,6 +99,29 @@ if retries > MAX_RETRIES { ... }
 ```
 
 Values live in `src/state/` modules (one file per concern) or `_cfg` structs for runtime config.
+
+## Child module extraction adviser
+
+Large inline `mod { ... }` blocks hurt readability and reduce AI context windows. RustScanners advises:
+
+- **100+ lines**: ⚠️ Warning — "Plan extraction to file"
+- **150+ lines**: ❌ Error — "Extract immediately"
+
+**Structure:**
+```rust
+// Before: inline module bloats parent
+mod parser {
+    // 120 lines of parsing logic...
+}
+
+// After: each file = one responsibility
+mod parser;
+
+// parser.rs contains the 120-line module
+pub fn parse(input: &str) -> Result<Ast, Error> { ... }
+```
+
+Each `.rs` file should do **one thing well** (parsing, validation, serialization, domain logic). This keeps code readable and AI context sharp.
 
 ## License
 

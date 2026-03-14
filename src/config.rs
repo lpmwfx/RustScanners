@@ -12,6 +12,9 @@ pub struct Config {
     pub check_unwrap_panic: bool,
     pub check_unsafe_no_comment: bool,
     pub check_doc_comments: bool,
+    pub check_child_module_size: bool,
+    pub child_module_warn_at: usize,
+    pub child_module_error_at: usize,
     pub exclude: Vec<String>,
 }
 
@@ -26,6 +29,9 @@ impl Default for Config {
             check_unwrap_panic: true,
             check_unsafe_no_comment: true,
             check_doc_comments: true,
+            check_child_module_size: true,
+            child_module_warn_at: 100,
+            child_module_error_at: 150,
             exclude: Vec::new(),
         }
     }
@@ -47,6 +53,9 @@ struct TomlScanners {
     unwrap_panic: Option<bool>,
     unsafe_no_comment: Option<bool>,
     doc_comments: Option<bool>,
+    child_module_size: Option<bool>,
+    child_module_warn_at: Option<usize>,
+    child_module_error_at: Option<usize>,
     exclude: Option<Vec<String>>,
 }
 
@@ -68,6 +77,9 @@ impl Config {
                     if let Some(v) = s.unwrap_panic        { cfg.check_unwrap_panic = v; }
                     if let Some(v) = s.unsafe_no_comment   { cfg.check_unsafe_no_comment = v; }
                     if let Some(v) = s.doc_comments        { cfg.check_doc_comments = v; }
+                    if let Some(v) = s.child_module_size   { cfg.check_child_module_size = v; }
+                    if let Some(v) = s.child_module_warn_at { cfg.child_module_warn_at = v; }
+                    if let Some(v) = s.child_module_error_at { cfg.child_module_error_at = v; }
                     if let Some(v) = s.exclude             { cfg.exclude = v; }
                 }
             }

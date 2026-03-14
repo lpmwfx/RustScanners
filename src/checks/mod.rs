@@ -10,3 +10,5 @@ pub mod unwrap_panic;
 pub mod unsafe_no_comment;
 /// Enforce /// doc comments on all pub items — rust/docs.md
 pub mod doc_comments;
+/// Advise extraction of large inline child modules — rust/modules.md
+pub mod child_module_size;

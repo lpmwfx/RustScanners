@@ -68,6 +68,11 @@ string_states = true          # match "foo" =>, == "kind"
 unwrap_panic = true           # .unwrap()/.expect()/panic!()/todo!() outside tests
 unsafe_no_comment = true      # unsafe block/fn without // SAFETY: comment
 doc_comments = true           # pub items must have /// doc comment
+child_module_size = true      # advise extraction of inline modules > 100 lines
+
+# Child module extraction thresholds (lines)
+child_module_warn_at = 100    # warning: plan extraction
+child_module_error_at = 150   # error: extract immediately
 EOF
     echo "[+] Created proj/rulestools.toml"
 else

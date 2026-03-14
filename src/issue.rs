@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 /// Severity level of a scanner issue — currently only Error is used.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Severity {
+    Warning,
     Error,
 }
 
@@ -19,6 +20,18 @@ pub struct Issue {
 }
 
 impl Issue {
+    /// Create a Warning-severity issue.
+    pub fn warning(file: &Path, line: usize, col: usize, rule: &str, message: String) -> Self {
+        Self {
+            file: file.to_path_buf(),
+            line,
+            col,
+            severity: Severity::Warning,
+            rule: rule.to_string(),
+            message,
+        }
+    }
+
     /// Create an Error-severity issue at the given file location with rule ID and message.
     pub fn error(file: &Path, line: usize, col: usize, rule: &str, message: String) -> Self {
         Self {
@@ -34,12 +47,17 @@ impl Issue {
 
 impl fmt::Display for Issue {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let severity = match self.severity {
+            Severity::Warning => "warning",
+            Severity::Error => "error",
+        };
         write!(
             f,
-            "{}:{}:{}: error {}: {}",
+            "{}:{}:{}: {} {}: {}",
             self.file.display(),
             self.line,
             self.col,
+            severity,
             self.rule,
             self.message
         )

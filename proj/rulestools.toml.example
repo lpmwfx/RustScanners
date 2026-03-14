@@ -1,0 +1,25 @@
+# RustScanners configuration — enable checks and set thresholds
+# Place actual config in proj/rulestools.toml
+
+[rustscanners]
+enabled = true
+deny = false                        # Set to true to fail cargo build on violations
+
+# Individual checks
+magic_numbers = true
+hardcoded_durations = true
+string_states = true
+unwrap_panic = true
+unsafe_no_comment = true
+doc_comments = true
+child_module_size = true
+
+# Child module extraction adviser — when to warn/error on inline modules
+child_module_warn_at = 100          # "Plan extraction now" (lines)
+child_module_error_at = 150         # "Extract immediately" (lines)
+
+# Exclude patterns (glob)
+exclude = [
+    "**/target/**",
+    "**/.cargo/**",
+]

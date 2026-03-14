@@ -158,6 +158,15 @@ pub fn scan_file(path: &Path, cfg: &Config) -> Vec<Issue> {
     if cfg.check_doc_comments {
         checks::doc_comments::check(&ctx, &lines, &mut issues);
     }
+    if cfg.check_child_module_size {
+        checks::child_module_size::check(
+            &ctx,
+            &lines,
+            &mut issues,
+            cfg.child_module_warn_at,
+            cfg.child_module_error_at,
+        );
+    }
 
     issues
 }
