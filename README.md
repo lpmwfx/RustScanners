@@ -57,6 +57,9 @@ hardcoded_durations = true
 hardcoded_urls = true
 hardcoded_paths = true
 string_states = true
+
+# Optional: exclude paths from scanning (glob patterns)
+exclude = ["target/*", "**/vendor/*"]
 ```
 
 ## How it works

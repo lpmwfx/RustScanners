@@ -12,6 +12,7 @@ pub struct Config {
     pub check_unwrap_panic: bool,
     pub check_unsafe_no_comment: bool,
     pub check_doc_comments: bool,
+    pub exclude: Vec<String>,
 }
 
 impl Default for Config {
@@ -25,6 +26,7 @@ impl Default for Config {
             check_unwrap_panic: true,
             check_unsafe_no_comment: true,
             check_doc_comments: true,
+            exclude: Vec::new(),
         }
     }
 }
@@ -45,6 +47,7 @@ struct TomlScanners {
     unwrap_panic: Option<bool>,
     unsafe_no_comment: Option<bool>,
     doc_comments: Option<bool>,
+    exclude: Option<Vec<String>>,
 }
 
 impl Config {
@@ -65,6 +68,7 @@ impl Config {
                     if let Some(v) = s.unwrap_panic        { cfg.check_unwrap_panic = v; }
                     if let Some(v) = s.unsafe_no_comment   { cfg.check_unsafe_no_comment = v; }
                     if let Some(v) = s.doc_comments        { cfg.check_doc_comments = v; }
+                    if let Some(v) = s.exclude             { cfg.exclude = v; }
                 }
             }
         }

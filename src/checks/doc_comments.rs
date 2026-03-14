@@ -46,7 +46,7 @@ pub fn check(ctx: &FileContext, lines: &[&str], issues: &mut Vec<Issue>) {
         }
 
         if !has_doc_comment(lines, idx) {
-            issues.push(Issue::warning(
+            issues.push(Issue::error(
                 ctx.path,
                 idx + 1,
                 1,

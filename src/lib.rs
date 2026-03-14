@@ -15,6 +15,7 @@ pub use issue::Issue;
 
 use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
+use glob::Pattern;
 
 /// Walk up from `start` to find a Cargo.toml containing `[workspace]`.
 /// Returns the workspace root if found, otherwise the original `start`.
@@ -59,7 +60,7 @@ pub fn scan_project() -> usize {
     // Always scan root/src/ if it exists
     let root_src = root.join("src");
     if root_src.is_dir() {
-        collect_rs_files(&root_src, &mut rs_files);
+        collect_rs_files(&root_src, &mut rs_files, &cfg.exclude);
     }
 
     // In a workspace, also scan member crate src/ directories
@@ -74,7 +75,7 @@ pub fn scan_project() -> usize {
             if let Some(parent) = entry.path().parent() {
                 let src = parent.join("src");
                 if src.is_dir() {
-                    collect_rs_files(&src, &mut rs_files);
+                    collect_rs_files(&src, &mut rs_files, &cfg.exclude);
                 }
             }
         }
@@ -104,10 +105,23 @@ pub fn scan_project() -> usize {
     total_errors
 }
 
-fn collect_rs_files(dir: &Path, out: &mut Vec<PathBuf>) {
+fn matches_exclude_pattern(path: &Path, patterns: &[String]) -> bool {
+    let path_str = path.to_string_lossy();
+    for pattern_str in patterns {
+        if let Ok(pattern) = Pattern::new(pattern_str) {
+            if pattern.matches(&path_str) {
+                return true;
+            }
+        }
+    }
+    false
+}
+
+fn collect_rs_files(dir: &Path, out: &mut Vec<PathBuf>, exclude: &[String]) {
     for entry in WalkDir::new(dir)
         .into_iter()
         .filter_map(|e| e.ok())
+        .filter(|e| !matches_exclude_pattern(e.path(), exclude))
         .filter(|e| e.path().extension().map_or(false, |ext| ext == "rs"))
     {
         out.push(entry.path().to_path_buf());
