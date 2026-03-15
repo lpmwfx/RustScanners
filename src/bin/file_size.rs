@@ -19,21 +19,33 @@
 use std::path::Path;
 use std::process;
 
+const QUOTE_PAIR: usize = 2; // open + close quotes = simple one-liner string literal
+const EXIT_USAGE: i32 = 2;   // exit code for bad CLI usage
+const EXT_PY: &str = "py";
+const EXT_CSS: &str = "css";
+const EXT_SCSS: &str = "scss";
+const SOFT_STANDARD: usize = 200;
+const HARD_STANDARD: usize = 250;
+const SOFT_CSS: usize = 120;
+const HARD_CSS: usize = 150;
+const SOFT_CPP: usize = 280;
+const HARD_CPP: usize = 350;
+
 // (soft, hard)
 const LIMITS: &[(&str, usize, usize)] = &[
-    ("slint", 200, 250),
-    ("js",    200, 250),
-    ("ts",    200, 250),
-    ("mjs",   200, 250),
-    ("css",   120, 150),
-    ("scss",  120, 150),
-    ("py",    200, 250),
-    ("rs",    200, 250),
-    ("cpp",   280, 350),
-    ("cc",    280, 350),
-    ("cxx",   280, 350),
-    ("h",     280, 350),
-    ("hpp",   280, 350),
+    ("slint", SOFT_STANDARD, HARD_STANDARD),
+    ("js",    SOFT_STANDARD, HARD_STANDARD),
+    ("ts",    SOFT_STANDARD, HARD_STANDARD),
+    ("mjs",   SOFT_STANDARD, HARD_STANDARD),
+    ("css",   SOFT_CSS,      HARD_CSS),
+    ("scss",  SOFT_CSS,      HARD_CSS),
+    ("py",    SOFT_STANDARD, HARD_STANDARD),
+    ("rs",    SOFT_STANDARD, HARD_STANDARD),
+    ("cpp",   SOFT_CPP,      HARD_CPP),
+    ("cc",    SOFT_CPP,      HARD_CPP),
+    ("cxx",   SOFT_CPP,      HARD_CPP),
+    ("h",     SOFT_CPP,      HARD_CPP),
+    ("hpp",   SOFT_CPP,      HARD_CPP),
 ];
 
 fn limits_for(ext: &str) -> Option<(usize, usize)> {
@@ -48,7 +60,7 @@ fn is_c_family(ext: &str) -> bool {
 /// Count only code lines — skip comments, blanks, and pure string literals.
 fn count_code_lines(ext: &str, content: &str) -> usize {
     let mut count = 0;
-    let mut in_block = false;
+    let mut is_in_block = false;
 
     for line in content.lines() {
         let trimmed = line.trim();
@@ -59,15 +71,15 @@ fn count_code_lines(ext: &str, content: &str) -> usize {
         }
 
         if is_c_family(ext) {
-            if in_block {
+            if is_in_block {
                 if trimmed.ends_with("*/") {
-                    in_block = false;
+                    is_in_block = false;
                 }
                 continue;
             }
             if trimmed.starts_with("/*") {
                 if !trimmed.ends_with("*/") {
-                    in_block = true;
+                    is_in_block = true;
                 }
                 continue;
             }
@@ -77,32 +89,32 @@ fn count_code_lines(ext: &str, content: &str) -> usize {
             // pure string literal line: "..." or "...";
             if trimmed.starts_with('"') {
                 let rest = trimmed.trim_end_matches(';').trim();
-                if rest.ends_with('"') && rest.matches('"').count() == 2 {
+                if rest.ends_with('"') && rest.matches('"').count() == QUOTE_PAIR {
                     continue;
                 }
             }
-        } else if ext == "py" {
+        } else if ext == EXT_PY {
             if trimmed.starts_with('#') {
                 continue;
             }
             if trimmed.starts_with('"') {
                 let rest = trimmed.trim_end_matches(';').trim();
-                if rest.ends_with('"') && rest.matches('"').count() == 2 {
+                if rest.ends_with('"') && rest.matches('"').count() == QUOTE_PAIR {
                     continue;
                 }
             }
         }
         // css/scss: block comments only
-        else if ext == "css" || ext == "scss" {
-            if in_block {
+        else if ext == EXT_CSS || ext == EXT_SCSS {
+            if is_in_block {
                 if trimmed.ends_with("*/") {
-                    in_block = false;
+                    is_in_block = false;
                 }
                 continue;
             }
             if trimmed.starts_with("/*") {
                 if !trimmed.ends_with("*/") {
-                    in_block = true;
+                    is_in_block = true;
                 }
                 continue;
             }
@@ -153,7 +165,7 @@ fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
     if args.is_empty() {
         eprintln!("usage: file_size <file>...");
-        process::exit(2);
+        process::exit(EXIT_USAGE);
     }
 
     let errors: usize = args.iter().map(|p| check_file(p) as usize).sum();

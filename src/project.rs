@@ -4,7 +4,7 @@
 //! Helper functions keep each step focused and below the orchestrator threshold.
 
 use std::io::Write;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use crate::checks;
 use crate::config::Config;
@@ -98,4 +98,52 @@ fn emit_issue(iss: &Issue) {
 fn deny_build(count: usize) {
     let _ = writeln!(std::io::stdout(), "{}", DENY_MSG.replace("{}", &count.to_string()));
     std::process::exit(1);
+}
+
+/// Scan the project at `root` and return all issues.
+///
+/// Unlike `scan_project()`, this does not use `CARGO_MANIFEST_DIR` and
+/// does not emit `cargo:warning=` lines — suitable for standalone CLI use.
+pub fn scan_at(root: &Path) -> Vec<Issue> {
+    let Some((cfg, files)) = prepare_scan(root) else { return vec![]; };
+    let (mut issues, contents) = scan_files(&files, &cfg);
+    run_cross_file_checks(&contents, &cfg, &mut issues);
+    issues
+}
+
+fn prepare_scan(root: &Path) -> Option<(Config, Vec<PathBuf>)> {
+    let actual_root = gateway::find_workspace_root(root);
+    let cfg = Config::from_content(gateway::read_config(&actual_root).as_deref());
+    if !cfg.enabled {
+        return None;
+    }
+    let files = gateway::collect_project_files(&actual_root, &actual_root, &cfg.exclude);
+    if files.is_empty() {
+        return None;
+    }
+    Some((cfg, files))
+}
+
+fn scan_files(files: &[PathBuf], cfg: &Config) -> (Vec<Issue>, Vec<(PathBuf, String)>) {
+    let mut issues: Vec<Issue> = Vec::new();
+    let mut contents: Vec<(PathBuf, String)> = Vec::new();
+    for path in files {
+        let Some(content) = gateway::read_text(path) else { continue; };
+        issues.extend(scanner::scan_file(path, &content, cfg));
+        contents.push((path.clone(), content));
+    }
+    (issues, contents)
+}
+
+fn run_cross_file_checks(
+    contents: &[(PathBuf, String)],
+    cfg: &Config,
+    issues: &mut Vec<Issue>,
+) {
+    if cfg.check_sibling_import {
+        checks::sibling_import::check(contents, issues);
+    }
+    if cfg.check_duplicate_pub_fn {
+        checks::duplicate_pub_fn::check(contents, issues);
+    }
 }

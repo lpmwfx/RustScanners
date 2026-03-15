@@ -10,6 +10,10 @@ keywords = ["lint", "static-analysis", "build-script", "zero-literal"]
 categories = ["development-tools", "development-tools::build-utils"]
 
 [[bin]]
+name = "rustscanners"
+path = "src/bin/scan.rs"
+
+[[bin]]
 name = "file_size"
 path = "src/bin/file_size.rs"
 

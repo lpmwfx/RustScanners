@@ -69,6 +69,15 @@ pub fn check(files: &[(PathBuf, String)], issues: &mut Vec<Issue>) {
             continue;
         }
 
+        // Strategy/plugin pattern: all files in the same directory share a
+        // function name by convention (e.g. checks/*/pub fn check) — not a
+        // candidate for extraction.
+        let unique_dirs: HashSet<Option<&Path>> =
+            unique_files.iter().map(|f| f.parent()).collect();
+        if unique_dirs.len() == 1 {
+            continue;
+        }
+
         let mut reported: HashSet<&PathBuf> = HashSet::new();
 
         for (file, lineno) in locations {

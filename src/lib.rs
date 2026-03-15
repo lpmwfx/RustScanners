@@ -14,5 +14,5 @@ mod project;
 mod scanner;
 
 pub use config::Config;
-pub use issue::Issue;
-pub use project::scan_project;
+pub use issue::{Issue, Severity};
+pub use project::{scan_at, scan_project};
