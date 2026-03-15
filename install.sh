@@ -73,6 +73,11 @@ child_module_size = true      # advise extraction of inline modules > 100 lines
 # Child module extraction thresholds (lines)
 child_module_warn_at = 100    # warning: plan extraction
 child_module_error_at = 150   # error: extract immediately
+
+# Mother-child topology checks
+shared_guard = true           # ERROR: shared/ files must not use crate:: (topology-free)
+sibling_import = true         # WARNING: child must not import sibling child
+duplicate_pub_fn = true       # WARNING: same pub fn in 2+ children → extract to shared/
 EOF
     echo "[+] Created proj/rulestools.toml"
 else

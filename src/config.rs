@@ -1,5 +1,7 @@
 use serde::Deserialize;
-use std::path::Path;
+
+const DEFAULT_CHILD_WARN_AT: usize = 100;
+const DEFAULT_CHILD_ERROR_AT: usize = 150;
 
 /// Scanner configuration — loaded from `proj/rulestools.toml`.
 #[derive(Debug, Clone)]
@@ -15,6 +17,9 @@ pub struct Config {
     pub check_child_module_size: bool,
     pub child_module_warn_at: usize,
     pub child_module_error_at: usize,
+    pub check_shared_guard: bool,
+    pub check_sibling_import: bool,
+    pub check_duplicate_pub_fn: bool,
     pub exclude: Vec<String>,
 }
 
@@ -30,8 +35,11 @@ impl Default for Config {
             check_unsafe_no_comment: true,
             check_doc_comments: true,
             check_child_module_size: true,
-            child_module_warn_at: 100,
-            child_module_error_at: 150,
+            child_module_warn_at: DEFAULT_CHILD_WARN_AT,
+            child_module_error_at: DEFAULT_CHILD_ERROR_AT,
+            check_shared_guard: true,
+            check_sibling_import: true,
+            check_duplicate_pub_fn: true,
             exclude: Vec::new(),
         }
     }
@@ -56,34 +64,46 @@ struct TomlScanners {
     child_module_size: Option<bool>,
     child_module_warn_at: Option<usize>,
     child_module_error_at: Option<usize>,
+    shared_guard: Option<bool>,
+    sibling_import: Option<bool>,
+    duplicate_pub_fn: Option<bool>,
     exclude: Option<Vec<String>>,
 }
 
 impl Config {
-    /// Load configuration from `proj/rulestools.toml` in the project root.
-    /// Falls back to defaults if the file doesn't exist.
-    pub fn load(project_root: &Path) -> Self {
-        let toml_path = project_root.join("proj").join("rulestools.toml");
+    /// Parse configuration from the content of `proj/rulestools.toml`.
+    /// Pass `None` (or `Some("")`) to use defaults.
+    pub fn from_content(content: Option<&str>) -> Self {
         let mut cfg = Self::default();
 
-        if let Ok(content) = std::fs::read_to_string(&toml_path) {
-            if let Ok(parsed) = toml::from_str::<TomlRoot>(&content) {
-                if let Some(s) = parsed.rustscanners {
-                    if let Some(v) = s.enabled            { cfg.enabled = v; }
-                    if let Some(v) = s.deny               { cfg.deny = v; }
-                    if let Some(v) = s.magic_numbers       { cfg.check_magic_numbers = v; }
-                    if let Some(v) = s.hardcoded_durations { cfg.check_hardcoded_durations = v; }
-                    if let Some(v) = s.string_states       { cfg.check_string_states = v; }
-                    if let Some(v) = s.unwrap_panic        { cfg.check_unwrap_panic = v; }
-                    if let Some(v) = s.unsafe_no_comment   { cfg.check_unsafe_no_comment = v; }
-                    if let Some(v) = s.doc_comments        { cfg.check_doc_comments = v; }
-                    if let Some(v) = s.child_module_size   { cfg.check_child_module_size = v; }
-                    if let Some(v) = s.child_module_warn_at { cfg.child_module_warn_at = v; }
-                    if let Some(v) = s.child_module_error_at { cfg.child_module_error_at = v; }
-                    if let Some(v) = s.exclude             { cfg.exclude = v; }
-                }
-            }
-        }
+        let text = match content {
+            Some(t) if !t.is_empty() => t,
+            _ => return cfg,
+        };
+
+        let Ok(parsed) = toml::from_str::<TomlRoot>(text) else {
+            return cfg;
+        };
+
+        let Some(s) = parsed.rustscanners else {
+            return cfg;
+        };
+
+        if let Some(v) = s.enabled            { cfg.enabled = v; }
+        if let Some(v) = s.deny               { cfg.deny = v; }
+        if let Some(v) = s.magic_numbers       { cfg.check_magic_numbers = v; }
+        if let Some(v) = s.hardcoded_durations { cfg.check_hardcoded_durations = v; }
+        if let Some(v) = s.string_states       { cfg.check_string_states = v; }
+        if let Some(v) = s.unwrap_panic        { cfg.check_unwrap_panic = v; }
+        if let Some(v) = s.unsafe_no_comment   { cfg.check_unsafe_no_comment = v; }
+        if let Some(v) = s.doc_comments        { cfg.check_doc_comments = v; }
+        if let Some(v) = s.child_module_size   { cfg.check_child_module_size = v; }
+        if let Some(v) = s.child_module_warn_at { cfg.child_module_warn_at = v; }
+        if let Some(v) = s.child_module_error_at { cfg.child_module_error_at = v; }
+        if let Some(v) = s.shared_guard        { cfg.check_shared_guard = v; }
+        if let Some(v) = s.sibling_import      { cfg.check_sibling_import = v; }
+        if let Some(v) = s.duplicate_pub_fn    { cfg.check_duplicate_pub_fn = v; }
+        if let Some(v) = s.exclude             { cfg.exclude = v; }
 
         cfg
     }

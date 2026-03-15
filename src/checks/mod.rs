@@ -12,3 +12,9 @@ pub mod unsafe_no_comment;
 pub mod doc_comments;
 /// Advise extraction of large inline child modules — rust/modules.md
 pub mod child_module_size;
+/// Enforce that shared/ modules have zero internal dependencies — rust/modules/shared.md
+pub mod shared_guard;
+/// Detect child-to-sibling-child imports — rust/modules/mother-child.md
+pub mod sibling_import;
+/// Detect duplicate pub fn names across children — rust/modules/shared.md
+pub mod duplicate_pub_fn;
