@@ -33,7 +33,7 @@ pub fn scan_project() -> usize {
 fn collect_context() -> Option<(PathBuf, Config, Vec<PathBuf>)> {
     let manifest_dir = resolve_manifest_dir();
     let root = gateway::find_workspace_root(&manifest_dir);
-    let cfg = load_config(&root);
+    let cfg = load_config(&root, &manifest_dir);
     if !cfg.enabled {
         return None;
     }
@@ -50,8 +50,12 @@ fn resolve_manifest_dir() -> PathBuf {
         .unwrap_or_else(|_| std::env::current_dir().unwrap_or_else(|_| PathBuf::from(".")))
 }
 
-fn load_config(root: &PathBuf) -> Config {
-    Config::from_content(gateway::read_config(root).as_deref())
+fn load_config(root: &Path, manifest_dir: &Path) -> Config {
+    // Crate-local proj/rulestools.toml takes precedence — allows per-crate topology override.
+    // Falls back to workspace root config (the common case for library crates).
+    let content = gateway::read_config(manifest_dir)
+        .or_else(|| gateway::read_config(root));
+    Config::from_content(content.as_deref())
 }
 
 fn scan_sources(
