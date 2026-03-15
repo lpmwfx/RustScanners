@@ -3,6 +3,24 @@ use serde::Deserialize;
 const DEFAULT_CHILD_WARN_AT: usize = 100;
 const DEFAULT_CHILD_ERROR_AT: usize = 150;
 
+/// Project topology — controls which files the scanner collects.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub enum Topology {
+    /// Single crate: scan own `src/` only. Default.
+    #[default]
+    Flat,
+    /// Workspace: scan all `apps/*/src/` and `crates/*/src/` from workspace root.
+    Workspace,
+}
+
+const TOPOLOGY_WORKSPACE: &str = "workspace";
+
+impl Topology {
+    fn from_str(s: &str) -> Self {
+        if s.trim().to_lowercase() == TOPOLOGY_WORKSPACE { Self::Workspace } else { Self::Flat }
+    }
+}
+
 /// Scanner configuration — loaded from `proj/rulestools.toml`.
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -21,6 +39,7 @@ pub struct Config {
     pub check_sibling_import: bool,
     pub check_duplicate_pub_fn: bool,
     pub exclude: Vec<String>,
+    pub topology: Topology,
 }
 
 impl Default for Config {
@@ -41,6 +60,7 @@ impl Default for Config {
             check_sibling_import: true,
             check_duplicate_pub_fn: true,
             exclude: Vec::new(),
+            topology: Topology::Flat,
         }
     }
 }
@@ -49,6 +69,13 @@ impl Default for Config {
 struct TomlRoot {
     #[serde(default)]
     rustscanners: Option<TomlScanners>,
+    #[serde(default)]
+    project: Option<TomlProject>,
+}
+
+#[derive(Deserialize, Default)]
+struct TomlProject {
+    topology: Option<String>,
 }
 
 #[derive(Deserialize, Default)]
@@ -104,6 +131,10 @@ impl Config {
         if let Some(v) = s.sibling_import      { cfg.check_sibling_import = v; }
         if let Some(v) = s.duplicate_pub_fn    { cfg.check_duplicate_pub_fn = v; }
         if let Some(v) = s.exclude             { cfg.exclude = v; }
+
+        if let Some(p) = parsed.project {
+            if let Some(t) = p.topology { cfg.topology = Topology::from_str(&t); }
+        }
 
         cfg
     }

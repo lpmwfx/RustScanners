@@ -37,7 +37,7 @@ fn collect_context() -> Option<(PathBuf, Config, Vec<PathBuf>)> {
     if !cfg.enabled {
         return None;
     }
-    let files = gateway::collect_project_files(&root, &manifest_dir, &cfg.exclude);
+    let files = gateway::collect_project_files(&root, &manifest_dir, &cfg.topology, &cfg.exclude);
     if files.is_empty() {
         return None;
     }
@@ -117,7 +117,7 @@ fn prepare_scan(root: &Path) -> Option<(Config, Vec<PathBuf>)> {
     if !cfg.enabled {
         return None;
     }
-    let files = gateway::collect_project_files(&actual_root, &actual_root, &cfg.exclude);
+    let files = gateway::collect_project_files(&actual_root, &actual_root, &cfg.topology, &cfg.exclude);
     if files.is_empty() {
         return None;
     }

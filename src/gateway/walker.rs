@@ -4,6 +4,8 @@ use glob::Pattern;
 use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
 
+use crate::config::Topology;
+
 const CARGO_TOML: &str = "Cargo.toml";
 const RS_EXT: &str = "rs";
 const WORKSPACE_MAX_DEPTH: usize = 5;
@@ -43,33 +45,45 @@ pub fn collect_rs_files(dir: &Path, exclude: &[String]) -> Vec<PathBuf> {
         .collect()
 }
 
-/// Collect all `.rs` files for a project or workspace rooted at `root`.
+/// Collect all `.rs` files for a project based on declared topology.
+///
+/// - `Flat`: scans only `manifest_dir/src/` — suitable for standalone crates and library members
+///   that rely on a single scan-root binary to cover the full workspace.
+/// - `Workspace`: scans all `apps/*/src/` and `crates/*/src/` under the workspace root —
+///   use this only in the designated scan-root `build.rs` (typically `apps/desktop/`).
 pub fn collect_project_files(
     root: &Path,
     manifest_dir: &Path,
+    topology: &Topology,
     exclude: &[String],
 ) -> Vec<PathBuf> {
-    let mut files = Vec::new();
-
-    if root.join("src").is_dir() {
-        files.extend(collect_rs_files(&root.join("src"), exclude));
+    match topology {
+        Topology::Flat => collect_flat(manifest_dir, exclude),
+        Topology::Workspace => collect_workspace(root, exclude),
     }
+}
 
-    if root != manifest_dir {
-        let root_cargo = root.join(CARGO_TOML);
-        for entry in WalkDir::new(root)
-            .max_depth(WORKSPACE_MAX_DEPTH)
-            .into_iter()
-            .filter_map(|e| e.ok())
-            .filter(|e| e.file_name() == CARGO_TOML && e.path() != root_cargo)
-        {
-            if let Some(src) = entry.path().parent().map(|p| p.join("src")) {
-                if src.is_dir() {
-                    files.extend(collect_rs_files(&src, exclude));
-                }
+/// Scan only `manifest_dir/src/` — no workspace walk.
+fn collect_flat(manifest_dir: &Path, exclude: &[String]) -> Vec<PathBuf> {
+    let src = manifest_dir.join("src");
+    if src.is_dir() { collect_rs_files(&src, exclude) } else { vec![] }
+}
+
+/// Scan all member `src/` directories under the workspace root.
+fn collect_workspace(root: &Path, exclude: &[String]) -> Vec<PathBuf> {
+    let root_cargo = root.join(CARGO_TOML);
+    let mut files = Vec::new();
+    for entry in WalkDir::new(root)
+        .max_depth(WORKSPACE_MAX_DEPTH)
+        .into_iter()
+        .filter_map(|e| e.ok())
+        .filter(|e| e.file_name() == CARGO_TOML && e.path() != root_cargo)
+    {
+        if let Some(src) = entry.path().parent().map(|p| p.join("src")) {
+            if src.is_dir() {
+                files.extend(collect_rs_files(&src, exclude));
             }
         }
     }
-
     files
 }
