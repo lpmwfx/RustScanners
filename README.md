@@ -126,3 +126,12 @@ Each `.rs` file should do **one thing well** (parsing, validation, serialization
 ## License
 
 MIT
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=2" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
