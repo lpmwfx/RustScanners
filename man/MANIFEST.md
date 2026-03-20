@@ -52,3 +52,12 @@ Coverage: **25/25** items documented (**100%**)
 | `checks` | mod | src/lib.rs | 8 | ✓ |
 | `scan_project` | fn | src/lib.rs | 43 | ✓ |
 | `scan_file` | fn | src/lib.rs | 118 | ✓ |
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=2" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
